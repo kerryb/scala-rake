@@ -19,7 +19,7 @@ end
 directory "pkg"
 directory "bin"
 
-file JAR => [CLASSES, "pkg"] do |t|
+file JAR => CLASSES << "pkg" do |t|
   %x(jar cf #{t.name} -C bin .)
 end
 
