@@ -2,6 +2,7 @@ require "rake/clean"
 
 PROJECT = "HelloWorld"
 
+SCALA_HOME = "/usr/local/Cellar/scala/2.7.7"
 SRC = FileList["src/**/*.scala"]
 CLASSES = SRC.map {|f| f.pathmap("%{src,bin}X.class")}
 SPEC_SRC = FileList["spec/src/**/*.scala"]
@@ -20,7 +21,7 @@ end
 
 desc "Run specs"
 task :spec => CLASSES + SPEC_CLASSES do
-  exec "scala -cp lib/scalatest-1.0.jar:bin:spec/bin org.scalatest.tools.Runner -o -p spec/bin"
+  exec "scala -cp #{SCALA_HOME}/lib/scalatest-1.0.jar:bin:spec/bin org.scalatest.tools.Runner -o -p spec/bin"
 end
 
 directory "pkg"
