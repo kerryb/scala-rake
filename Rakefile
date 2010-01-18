@@ -33,9 +33,9 @@ file JAR => CLASSES << "pkg" do |t|
 end
 
 rule(%r(^bin/.*\.class) => [proc {|f| f.pathmap("%{bin,src}X.scala")}, "bin"]) do |t|
-  %x(scalac -d bin #{SRC})
+  system("scalac -d bin #{SRC}") || fail("Compilation failed")
 end
 
 rule(%r(^spec/bin/.*\.class) => [proc {|f| f.pathmap("%{bin,src}X.scala")}, "spec/bin"]) do |t|
-  %x(scalac -cp lib/scalatest-1.0.jar:bin -d spec/bin #{SPEC_SRC})
+  system("scalac -cp lib/scalatest-1.0.jar:bin -d spec/bin #{SPEC_SRC}") || fail("Spec compilation failed")  
 end
