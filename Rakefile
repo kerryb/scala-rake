@@ -10,8 +10,8 @@ JAR = "pkg/#{PROJECT}.jar"
 CLEAN.include %w(bin spec/bin)
 CLOBBER.include "pkg"
 
-desc "Build jar file"
-task :default => JAR
+desc "Run specs and build jar file"
+task :default => [:spec, JAR]
 
 desc "Run application from jar file"
 task :run => JAR do
@@ -32,9 +32,9 @@ file JAR => CLASSES << "pkg" do |t|
 end
 
 rule(%r(^bin/.*\.class) => [proc {|f| f.pathmap("%{bin,src}X.scala")}, "bin"]) do |t|
-  %x(scalac -d bin #{t.source})
+  %x(scalac -d bin #{SRC})
 end
 
 rule(%r(^spec/bin/.*\.class) => [proc {|f| f.pathmap("%{bin,src}X.scala")}, "spec/bin"]) do |t|
-  %x(scalac -cp lib/scalatest-1.0.jar:bin -d spec/bin #{t.source})
+  %x(scalac -cp lib/scalatest-1.0.jar:bin -d spec/bin #{SPEC_SRC})
 end
