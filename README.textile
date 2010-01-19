@@ -16,4 +16,4 @@ h2. Assumptions
 * Source is in src
 * Specs are in spec/src
 * If you want to use _rake run_, then the _PROJECT object is an application
-* <code>scalatest-1.0.jar</code> exists in <pre>$JAVA_HOME/lib</pre>
+* <code>scalatest-1.0.jar</code> exists in <code>$JAVA_HOME/lib</code>
