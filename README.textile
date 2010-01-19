@@ -1,0 +1,19 @@
+Demo project for a basic attempt to build simple Scala projects using rake,
+by someone with very little Scala experience!
+
+h2. Tasks:
+
+<pre>
+rake clean    # Remove any temporary products.
+rake clobber  # Remove any generated file.
+rake default  # Run specs and build jar file
+rake run      # Run application from jar file
+rake spec     # Run specs
+</pre>
+
+h2. Assumptions
+
+* Source is in src
+* Specs are in spec/src
+* If you want to use _rake run_, then the _PROJECT object is an application
+* <code>scalatest-1.0.jar</code> exists in <pre>$JAVA_HOME/lib</pre>
