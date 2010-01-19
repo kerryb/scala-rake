@@ -1,8 +1,10 @@
 require "rake/clean"
 
 PROJECT = "HelloWorld"
-
 SCALA_HOME = "/usr/local/Cellar/scala/2.7.7"
+
+# Should be pretty generic below here
+
 SRC = FileList["src/**/*.scala"]
 CLASSES = SRC.map {|f| f.pathmap("%{src,bin}X.class")}
 SPEC_SRC = FileList["spec/src/**/*.scala"]
