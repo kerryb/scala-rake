@@ -22,7 +22,7 @@ task :run => JAR do
 end
 
 desc "Run specs"
-task :spec => CLASSES + SPEC_CLASSES do
+task :spec => SPEC_CLASSES do
   exec "scala -cp #{SCALA_HOME}/lib/scalatest-1.0.jar:bin:spec/bin org.scalatest.tools.Runner -o -p spec/bin"
 end
 
@@ -38,6 +38,6 @@ rule(%r(^bin/.*\.class) => [proc {|f| f.pathmap("%{bin,src}X.scala")}, "bin"]) d
   system("fsc -deprecation -d bin #{SRC}") || fail("Compilation failed")
 end
 
-rule(%r(^spec/bin/.*\.class) => [proc {|f| f.pathmap("%{bin,src}X.scala")}, "spec/bin"]) do |t|
+rule(%r(^spec/bin/.*\.class) => CLASSES + [proc {|f| f.pathmap("%{bin,src}X.scala")}, "spec/bin"]) do |t|
   system("fsc -deprecation -cp lib/scalatest-1.0.jar:bin -d spec/bin #{SPEC_SRC}") || fail("Spec compilation failed")
 end
