@@ -18,12 +18,12 @@ task :default => [:spec, JAR]
 
 desc "Run application from jar file"
 task :run => JAR do
-  exec "scala -cp #{JAR} #{PROJECT}"
+  sh "scala -cp #{JAR} #{PROJECT}"
 end
 
 desc "Run specs"
-task :spec => SPEC_CLASSES do
-  exec "scala -cp #{SCALA_HOME}/lib/scalatest-1.0.jar:bin:spec/bin org.scalatest.tools.Runner -o -p spec/bin"
+task :spec => CLASSES + SPEC_CLASSES do
+  sh "scala -cp #{SCALA_HOME}/lib/scalatest-1.0.jar:bin:spec/bin org.scalatest.tools.Runner -o -p spec/bin"
 end
 
 directory "pkg"
@@ -34,10 +34,12 @@ file JAR => CLASSES << "pkg" do |t|
   %x(jar cf #{t.name} -C bin .)
 end
 
-rule(%r(^bin/.*\.class) => [proc {|f| f.pathmap("%{bin,src}X.scala")}, "bin"]) do |t|
-  system("fsc -deprecation -d bin #{SRC}") || fail("Compilation failed")
+rule(%r(^bin/.*\.class) => [proc {|f| f.pathmap("%{^bin,src}X.scala")}, "bin"]) do |t|
+  command = "fsc -deprecation -classpath bin -sourcepath src -d bin #{t.source}"
+  sh(command) || fail("Compilation failed")
 end
 
-rule(%r(^spec/bin/.*\.class) => CLASSES + [proc {|f| f.pathmap("%{bin,src}X.scala")}, "spec/bin"]) do |t|
-  system("fsc -deprecation -cp lib/scalatest-1.0.jar:bin -d spec/bin #{SPEC_SRC}") || fail("Spec compilation failed")
+rule(%r(^spec/bin/.*\.class) => [proc {|f| f.pathmap("%{^spec/bin,spec/src}X.scala")}, "spec/bin"] + CLASSES) do |t|
+  command = "fsc -deprecation -classpath bin -sourcepath spec/src -d spec/bin #{t.source}"
+  sh(command) || fail("Spec compilation failed")
 end
